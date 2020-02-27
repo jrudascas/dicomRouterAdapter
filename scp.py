@@ -1,6 +1,6 @@
 from pynetdicom import AE, evt, StoragePresentationContexts
 from adapters.pacs.aicoreadapter import AiCorePACSAdapter
-from cdm import CHEST_MODEL, API_KEY, API_URL
+from cdm import CHEST_MODEL, API_KEY, API_URL, SERVER_HOST_ADDRESS, SERVER_HOST_AET, SERVER_HOST_PORT
 
 
 class ServiceClassProvider(object):
@@ -32,5 +32,5 @@ class ServiceClassProvider(object):
         return scp
 
 
-service = ServiceClassProvider(aet='DAEMON', address='127.0.0.1', port=11112)
+service = ServiceClassProvider(aet=SERVER_HOST_AET, address=SERVER_HOST_ADDRESS, port=SERVER_HOST_PORT)
 scp = service.start_server()
