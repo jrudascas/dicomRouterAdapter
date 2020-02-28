@@ -23,11 +23,11 @@ class ServiceClassProvider(object):
 
             if ds.BodyPartExamined == 'CHEST' and ds.Modality == 'CR' and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
                 ds.file_meta = event.file_meta
-                self.adapter.send_message(model_name=CHEST_MODEL, metadata={ds.StudyID: ds})
-
-            print('Fin fin fin')
-
-            return 0x0000
+                status = self.adapter.send_message(model_name=CHEST_MODEL, metadata={ds.StudyID: ds})
+                if status == 0:
+                    return 0x0000
+            else:
+                return 0x0000
 
         handlers = [(evt.EVT_C_STORE, handle_store), (evt.EVT_C_MOVE, handle_store)]
         scp = self.ae.start_server((self.address, self.port), block=True, evt_handlers=handlers)
