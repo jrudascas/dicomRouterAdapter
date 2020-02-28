@@ -15,6 +15,7 @@ class ServiceClassProvider(object):
 
     def start_server(self):
         def handle_store(event):
+            print(event)
             print('Llegó mensaje')
             ds = event.dataset
 
@@ -26,7 +27,7 @@ class ServiceClassProvider(object):
 
             return 0x0000
 
-        handlers = [(evt.EVT_C_STORE, handle_store)]
+        handlers = [(evt.EVT_C_STORE, handle_store), (evt.EVT_C_MOVE, handle_store)]
         scp = self.ae.start_server((self.address, self.port), block=True, evt_handlers=handlers)
         print('Server started successfully')
         return scp
