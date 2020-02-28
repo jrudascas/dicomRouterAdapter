@@ -1,4 +1,4 @@
-from pynetdicom import AE, evt, StoragePresentationContexts, VerificationPresentationContexts
+from pynetdicom import AE, evt, StoragePresentationContexts, VerificationPresentationContexts, QueryRetrievePresentationContexts, RelevantPatientInformationPresentationContexts
 from adapters.pacs.aicoreadapter import AiCorePACSAdapter
 from cdm import CHEST_MODEL, API_KEY, API_URL, SERVER_HOST_ADDRESS, SERVER_HOST_AET, SERVER_HOST_PORT
 
@@ -12,6 +12,8 @@ class ServiceClassProvider(object):
         self.ae = AE(ae_title=self.ae_title)
         self.ae.supported_contexts = StoragePresentationContexts
         self.ae.supported_contexts = VerificationPresentationContexts
+        self.ae.supported_contexts = QueryRetrievePresentationContexts
+        self.ae.supported_contexts = RelevantPatientInformationPresentationContexts
 
         self.adapter = AiCorePACSAdapter({'API_URL':API_URL, 'API_KEY':API_KEY})
 
