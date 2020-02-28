@@ -25,8 +25,7 @@ class AiCoreClient:
                    'images': [{'private_id': private_id, 'url_path': file_path}]}
         # convert dict to json by json.dumps() for body data.
 
-        print(payload)
         resp = requests.post(self.api_url + request_url, data=json.dumps(payload, indent=4), headers=self.headers)
         json_response = json.loads(resp.content)
         if json_response['status'] != 'OK':
-            raise Exception('AI Core service response with errors')
+            raise Exception('AI Core service responded with errors')
