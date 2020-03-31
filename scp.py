@@ -24,7 +24,7 @@ class ServiceClassProvider(object):
 
             if ds.BodyPartExamined == 'CHEST' and ds.Modality == 'CR' and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
                 ds.file_meta = event.file_meta
-                status = self.adapter.send_message(model_name=CHEST_MODEL, metadata={ds.StudyID: ds})
+                status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)
                 if status == 0:
                     print("Message processed successfully")
                     return 0x0000

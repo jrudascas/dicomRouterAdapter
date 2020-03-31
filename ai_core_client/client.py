@@ -29,3 +29,5 @@ class AiCoreClient:
         json_response = json.loads(resp.content)
         if json_response['status'] != 'OK':
             raise Exception('AI Core service responded with errors')
+
+        return json_response
