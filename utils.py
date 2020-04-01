@@ -7,7 +7,7 @@ def create_secondary_capture(img_data, original_ds):
     filename = 'test.dcm'
     sop_instance_uid = pydicom.uid.generate_uid()
     sop_series_uid = pydicom.uid.generate_uid()
-    sop_study_uid = original_ds.SeriesInstanceUID
+    sop_study_uid = original_ds.StudyInstanceUID
     sop_class_uid = '1.2.840.10008.5.1.4.1.1.7'
 
     file_meta = Dataset()
@@ -38,8 +38,39 @@ def create_secondary_capture(img_data, original_ds):
     ds.PatientID = original_ds.PatientID
     ds.PatientBirthDate = original_ds.PatientBirthDate
     ds.PatientSex = original_ds.PatientSex
+    ds.SpecificCharacterSet = original_ds.SpecificCharacterSet
 
     ds.is_implicit_VR = False
     ds.save_as(filename)
 
     return ds
+
+
+def create_dicom_test(dicom_ref_path, out_put_path):
+    ds = pydicom.dcmread(dicom_ref_path)
+
+    sop_class_uid = '1.2.840.10008.5.1.4.1.1.1'
+    sop_instance_uid = pydicom.uid.generate_uid()
+
+    file_meta = Dataset()
+    file_meta.MediaStorageSOPClassUID = sop_class_uid
+    file_meta.MediaStorageSOPInstanceUID = sop_instance_uid
+    file_meta.ImplementationClassUID = '1.2.40.0.13.1.1.1'
+    file_meta.TransferSyntaxUID = pydicom.uid.ImplicitVRLittleEndian
+
+    ds.file_meta = file_meta
+    ds.SOPInstanceUID = sop_instance_uid
+    ds.StudyInstanceUID = pydicom.uid.generate_uid()
+    ds.SeriesInstanceUID = pydicom.uid.generate_uid()
+    ds.SOPClassUID = sop_class_uid
+    ds.StudyID = '1504220022101888'
+    ds.PerformedProcedureStepID = '1504220022101888'
+
+    ds.StudyDate = '20200401'
+    ds.ContentDate = '20200401'
+    ds.PatientName = 'GOKU'
+    ds.PatientID = '1082465982'
+    ds.PatientBirthDate = '19780804'
+    ds.PatientSex = 'M'
+    ds.StudyDescription = 'PRUEBA AI CORE'
+    ds.save_as(out_put_path)

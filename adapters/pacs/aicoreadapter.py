@@ -50,7 +50,6 @@ class AiCorePACSAdapter(TargetAdapter):
                                              model_id=model_id)
 
             try:
-
                 visual_reponse_path = response_dict['data']['predictions'][0]['visual_prediction']
                 if validators.url(visual_reponse_path):
                     local_image_filename = wget.download(visual_reponse_path)
