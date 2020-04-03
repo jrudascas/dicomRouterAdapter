@@ -22,7 +22,7 @@ class ServiceClassProvider(object):
             print('Message received')
             ds = event.dataset
 
-            if ds.BodyPartExamined == 'CHEST' and ds.Modality == 'CR' and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
+            if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
                 ds.file_meta = event.file_meta
                 status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)
                 if status == 0:

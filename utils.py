@@ -68,7 +68,7 @@ def create_dicom_test(dicom_ref_path, out_put_path):
 
     ds.StudyDate = '20200401'
     ds.ContentDate = '20200401'
-    ds.PatientName = 'GOKU'
+    ds.PatientName = 'JORGITO'
     ds.PatientID = '1082465982'
     ds.PatientBirthDate = '19780804'
     ds.PatientSex = 'M'
