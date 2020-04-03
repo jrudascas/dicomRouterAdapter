@@ -50,6 +50,7 @@ class ServiceClassProvider(object):
             except Exception as e:
                 print("Fatal error: ", e.__str__())
                 print("Message discarded")
+                print(ds)
 
         handlers = [(evt.EVT_C_STORE, handle_store), (evt.EVT_C_MOVE, handle_store)]
         print('Server started successfully')
