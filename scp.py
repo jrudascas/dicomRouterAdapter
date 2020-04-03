@@ -30,6 +30,8 @@ class ServiceClassProvider(object):
                     if status == 0:
                         print("Message processed successfully")
                         return 0x0000
+                    else:
+                        print("Message processed with erros")
                 except Exception as e:
                     print('Message discarded. Details: ', e.__str__())
             else:
