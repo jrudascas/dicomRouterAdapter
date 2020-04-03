@@ -26,6 +26,9 @@ class ServiceClassProvider(object):
                 if hasattr(ds, 'PatientName'):
                     print('Patient --> ', ds.PatientName)
 
+                if ds.SOPClassUID == '1.2.840.10008.5.1.4.1.1.7':
+                    raise Exception ('Message received is Secondary Capture type')
+
                 if not (hasattr(ds, 'BodyPartExamined') and hasattr(ds, 'Modality') and hasattr(ds, 'SeriesDescription')):
                     raise Exception('Any of mandatory attribute does not exist in the dataset')
 
@@ -50,7 +53,7 @@ class ServiceClassProvider(object):
             except Exception as e:
                 print("Fatal error: ", e.__str__())
                 print("Message discarded")
-                print(ds)
+                return 0x0000
 
         handlers = [(evt.EVT_C_STORE, handle_store), (evt.EVT_C_MOVE, handle_store)]
         print('Server started successfully')
