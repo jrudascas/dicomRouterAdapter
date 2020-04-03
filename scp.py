@@ -30,6 +30,7 @@ class ServiceClassProvider(object):
                     raise Exception ('Message received is Secondary Capture type')
 
                 if not (hasattr(ds, 'BodyPartExamined') and hasattr(ds, 'Modality') and hasattr(ds, 'SeriesDescription')):
+                    print('SOPClassUID: ', ds.SOPClassUID)
                     raise Exception('Any of mandatory attribute does not exist in the dataset')
 
                 if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
