@@ -28,6 +28,6 @@ class AiCoreClient:
         resp = requests.post(self.api_url + request_url, data=json.dumps(payload, indent=4), headers=self.headers)
         json_response = json.loads(resp.content)
         if json_response['status'] != 'OK':
-            raise Exception('AI Core service responded with errors')
+            raise Exception('AI Core service responded with errors. Details: ', json_response)
 
         return json_response
