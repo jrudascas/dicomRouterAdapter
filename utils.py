@@ -25,7 +25,7 @@ def create_secondary_capture(img_data, original_ds):
     ds.SOPInstanceUID = sop_instance_uid
     ds.SOPClassUID = sop_class_uid
     ds.SecondaryCaptureDeviceManufctur = 'AICORE_IMEXHS'
-    ds.SeriesDescription = 'AI Diagnostic from ImexHS AI Core'
+    ds.SeriesDescription = 'Stella AI Report'
     ds.Rows, ds.Columns, _ = img_data.shape
     ds.SamplesPerPixel = 3
     ds.BitsAllocated = 8
