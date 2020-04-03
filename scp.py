@@ -22,22 +22,27 @@ class ServiceClassProvider(object):
             try:
                 print('Message received')
                 ds = event.dataset
+                ds.file_meta = event.file_meta
 
                 if hasattr(ds, 'PatientName'):
                     print('Patient --> ', ds.PatientName)
 
                 if ds.SOPClassUID == '1.2.840.10008.5.1.4.1.1.7':
-                    raise Exception ('Message received is Secondary Capture type')
+                    raise Exception ('Message received is a Secondary Capture')
 
-                if not (hasattr(ds, 'BodyPartExamined') and hasattr(ds, 'Modality') and hasattr(ds, 'SeriesDescription')):
-                    print('SOPClassUID: ', ds.SOPClassUID)
-                    print(ds)
-                    raise Exception('Any of mandatory attribute does not exist in the dataset')
+                if not hasattr(ds, 'BodyPartExamined'):
+                    raise Exception('Dataset does not has BodyPartExamined attribute')
+                elif not hasattr(ds, 'Modality'):
+                    raise Exception('Dataset does not has Modality attribute')
+                elif not hasattr(ds, 'SeriesDescription'):
+                    if hasattr(ds, 'StudyDescription'):
+                        ds.SeriesDescription = ds.StudyDescription
+                    else:
+                        raise Exception('Dataset does not has neither SeriesDescription and StudyDescription attributes')
 
                 if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
                     print('Starting processing...')
                     try:
-                        ds.file_meta = event.file_meta
                         status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)
                         if status == 0:
                             print("Message processed successfully")
