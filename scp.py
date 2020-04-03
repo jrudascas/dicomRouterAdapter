@@ -31,6 +31,7 @@ class ServiceClassProvider(object):
 
                 if not (hasattr(ds, 'BodyPartExamined') and hasattr(ds, 'Modality') and hasattr(ds, 'SeriesDescription')):
                     print('SOPClassUID: ', ds.SOPClassUID)
+                    print(ds)
                     raise Exception('Any of mandatory attribute does not exist in the dataset')
 
                 if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
