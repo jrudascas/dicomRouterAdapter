@@ -23,7 +23,7 @@ class ServiceClassProvider(object):
             ds = event.dataset
 
             if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
-
+                print('Message right: Patient --> ', ds.PatientName)
                 try:
                     ds.file_meta = event.file_meta
                     status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)
@@ -34,6 +34,8 @@ class ServiceClassProvider(object):
                         print("Message processed with erros")
                 except Exception as e:
                     print('Message discarded. Details: ', e.__str__())
+                    return 0x0000
+
             else:
                 print("Message discarded")
                 return 0x0000
