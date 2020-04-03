@@ -23,8 +23,14 @@ class ServiceClassProvider(object):
                 print('Message received')
                 ds = event.dataset
 
+                if hasattr(ds, 'PatientName'):
+                    print('Patient --> ', ds.PatientName)
+
+                if not (hasattr(ds, 'BodyPartExamined') and hasattr(ds, 'Modality') and hasattr(ds, 'SeriesDescription')):
+                    raise Exception('Any of mandatory attribute does not exist in the dataset')
+
                 if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
-                    print('Message right: Patient --> ', ds.PatientName)
+                    print('Starting processing...')
                     try:
                         ds.file_meta = event.file_meta
                         status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)
@@ -33,6 +39,7 @@ class ServiceClassProvider(object):
                             return 0x0000
                         else:
                             print("Message processed with erros")
+                            return 0x0000
                     except Exception as e:
                         print('Message discarded. Details: ', e.__str__())
                         return 0x0000
@@ -42,6 +49,7 @@ class ServiceClassProvider(object):
                     return 0x0000
             except Exception as e:
                 print("Fatal error: ", e.__str__())
+                print("Message discarded")
 
         handlers = [(evt.EVT_C_STORE, handle_store), (evt.EVT_C_MOVE, handle_store)]
         print('Server started successfully')
