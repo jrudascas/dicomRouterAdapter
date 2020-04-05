@@ -40,7 +40,7 @@ class ServiceClassProvider(object):
                     else:
                         raise Exception('Dataset does not has neither SeriesDescription and StudyDescription attributes')
 
-                if ds.BodyPartExamined == 'CHEST' and (ds.Modality == 'CR' or ds.Modality == 'DX') and 'PA' in ds.SeriesDescription:  # Esto se ve feo, mejorar otro día.
+                if ds.BodyPartExamined.upper() in ['CHEST', 'TORAX', 'BREAST'] and ds.Modality.upper() in ['CR', 'DX'] and 'PA' in ds.SeriesDescription.upper():  # Esto se ve feo, mejorar otro día.
                     print('Starting processing...')
                     try:
                         status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)

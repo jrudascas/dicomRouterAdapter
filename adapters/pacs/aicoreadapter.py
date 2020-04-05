@@ -12,6 +12,7 @@ from cdm import END_POINT_FIND_MODEL_BY_ID, END_POINT_RUN_PREDICTION
 from scu import ServiceClassUser
 from cdm import SERVER_REMOTE_ADDRESS, SERVER_REMOTE_PORT, SERVER_REMOTE_AET
 from utils import create_secondary_capture
+import matplotlib.pyplot as plt
 
 
 class AiCorePACSAdapter(TargetAdapter):
@@ -28,6 +29,7 @@ class AiCorePACSAdapter(TargetAdapter):
         try:
             study_id = metadata.StudyID
             image = metadata.pixel_array.astype(float)
+
             image_scaled = (np.maximum(image, 0) / image.max()) * 255.0
             image_scaled = np.uint8(image_scaled)
 
@@ -42,9 +44,9 @@ class AiCorePACSAdapter(TargetAdapter):
 
             file_path = '/tmp/' + study_id + '.png'
             with open(file_path, 'wb') as png_file:
-                w = png.Writer(shape[1], shape[0], greyscale=True)
+                w = png.Writer(shape[1], shape[0])
                 w.write(png_file, image_resized)
-
+            print(file_path)
             model_id = self.find_model_id(model_name)
             response_dict = self.ai_core_client.send_request(request_url=END_POINT_RUN_PREDICTION, file_path=file_path, private_id=study_id,
                                              model_id=model_id)

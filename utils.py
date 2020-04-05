@@ -38,7 +38,7 @@ def create_secondary_capture(img_data, original_ds):
     ds.PatientID = original_ds.PatientID
     ds.PatientBirthDate = original_ds.PatientBirthDate
     ds.PatientSex = original_ds.PatientSex
-    ds.SpecificCharacterSet = original_ds.SpecificCharacterSet
+    #ds.SpecificCharacterSet = original_ds.SpecificCharacterSet
 
     ds.is_implicit_VR = False
     ds.save_as(filename)
