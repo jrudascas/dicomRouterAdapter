@@ -12,7 +12,6 @@ from cdm import END_POINT_FIND_MODEL_BY_ID, END_POINT_RUN_PREDICTION
 from scu import ServiceClassUser
 from cdm import SERVER_REMOTE_ADDRESS, SERVER_REMOTE_PORT, SERVER_REMOTE_AET
 from utils import create_secondary_capture
-import matplotlib.pyplot as plt
 
 
 class AiCorePACSAdapter(TargetAdapter):
