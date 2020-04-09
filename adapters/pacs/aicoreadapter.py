@@ -24,7 +24,7 @@ class AiCorePACSAdapter(TargetAdapter):
         resp = self.ai_core_client.find_model_by_name(END_POINT_FIND_MODEL_BY_ID, model_name)
         return resp
 
-    def send_message(self, model_name, metadata):
+    def send_message(self, model_name, return_secondary_capture, metadata):
         try:
             study_id = metadata.StudyID
             image = metadata.pixel_array.astype(float)
@@ -50,34 +50,35 @@ class AiCorePACSAdapter(TargetAdapter):
             response_dict = self.ai_core_client.send_request(request_url=END_POINT_RUN_PREDICTION, file_path=file_path, private_id=study_id,
                                              model_id=model_id)
 
-            try:
-                visual_reponse_path = response_dict['data']['predictions'][0]['visual_prediction']
-                if validators.url(visual_reponse_path):
-                    local_image_filename = wget.download(visual_reponse_path)
-                    visual_response_image = Image.open(local_image_filename)
-                elif path.exists(visual_reponse_path):
-                    visual_response_image = Image.open(visual_reponse_path)
-                else:
-                    raise Exception('url_path wrong')
+            if return_secondary_capture:
+                try:
+                    visual_reponse_path = response_dict['data']['predictions'][0]['visual_prediction']
+                    if validators.url(visual_reponse_path):
+                        local_image_filename = wget.download(visual_reponse_path)
+                        visual_response_image = Image.open(local_image_filename)
+                    elif path.exists(visual_reponse_path):
+                        visual_response_image = Image.open(visual_reponse_path)
+                    else:
+                        raise Exception('url_path wrong')
 
-                visual_response_image = visual_response_image.convert('RGB')
-                visual_response_image = np.asarray(visual_response_image)
-                if visual_response_image.shape != original_shape:
-                    visual_response_image = cv2.resize(visual_response_image, original_shape, interpolation=cv2.INTER_AREA)
+                    visual_response_image = visual_response_image.convert('RGB')
+                    visual_response_image = np.asarray(visual_response_image)
+                    if visual_response_image.shape != original_shape:
+                        visual_response_image = cv2.resize(visual_response_image, original_shape, interpolation=cv2.INTER_AREA)
 
-                secondary_capture_ds = create_secondary_capture(visual_response_image, metadata)
+                    secondary_capture_ds = create_secondary_capture(visual_response_image, metadata)
 
-                scu = ServiceClassUser(origin_aet='ROUTER_ADAPTER')
-                scu.associate(remote_address=SERVER_REMOTE_ADDRESS, remote_port=SERVER_REMOTE_PORT, remote_aet=SERVER_REMOTE_AET)
+                    scu = ServiceClassUser(origin_aet='ROUTER_ADAPTER')
+                    scu.associate(remote_address=SERVER_REMOTE_ADDRESS, remote_port=SERVER_REMOTE_PORT, remote_aet=SERVER_REMOTE_AET)
 
-                scu.send_c_store(secondary_capture_ds)
-                del(scu)
-            except Exception as e:
-                print('Error: ', e.__str__())
-                #Revisar que hacer en caso de una excepcion
-                pass
+                    scu.send_c_store(secondary_capture_ds)
+                    del(scu)
+                except Exception as e:
+                    print('Error: ', e.__str__())
+                    #Revisar que hacer en caso de una excepcion
+                    pass
 
             return 0
         except Exception as e:
             print(e.__str__())
-            return -1
+            return 1

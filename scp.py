@@ -1,6 +1,7 @@
 from pynetdicom import AE, evt, StoragePresentationContexts, VerificationPresentationContexts, QueryRetrievePresentationContexts, RelevantPatientInformationPresentationContexts
 from adapters.pacs.aicoreadapter import AiCorePACSAdapter
-from cdm import CHEST_MODEL, API_KEY, API_URL, SERVER_HOST_ADDRESS, SERVER_HOST_AET, SERVER_HOST_PORT
+from cdm import MODELS_TO_SEND, API_KEY, API_URL, SERVER_HOST_ADDRESS, SERVER_HOST_AET, SERVER_HOST_PORT
+import numpy as np
 
 
 class ServiceClassProvider(object):
@@ -43,12 +44,18 @@ class ServiceClassProvider(object):
                 if ds.BodyPartExamined.upper() in ['CHEST', 'TORAX', 'BREAST'] and ds.Modality.upper() in ['CR', 'DX'] and 'PA' in ds.SeriesDescription.upper():  # Esto se ve feo, mejorar otro día.
                     print('Starting processing...')
                     try:
-                        status = self.adapter.send_message(model_name=CHEST_MODEL, metadata=ds)
-                        if status == 0:
+                        status = {}
+                        for model_name, return_secondary_capture in MODELS_TO_SEND:
+                            print('Sending to ', model_name, ' model...')
+                            status[model_name] = self.adapter.send_message(model_name=model_name, return_secondary_capture=return_secondary_capture, metadata=ds)
+                        if not np.array(list(status.values())).any():
                             print("Message processed successfully")
+
                             return 0x0000
                         else:
-                            print("Message processed with erros")
+                            print("Message processed with erros, Details: ")
+                            for k, v in status.items():
+                                print(k, ' --> ', 'Successfully' if v == 0 else 'With errors')
                             return 0x0000
                     except Exception as e:
                         print('Message discarded. Details: ', e.__str__())
