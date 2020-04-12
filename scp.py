@@ -41,7 +41,7 @@ class ServiceClassProvider(object):
                     else:
                         raise Exception('Dataset does not has neither SeriesDescription and StudyDescription attributes')
 
-                if ds.BodyPartExamined.upper() in ['CHEST', 'TORAX', 'BREAST'] and ds.Modality.upper() in ['CR', 'DX'] and 'PA' in ds.SeriesDescription.upper():  # Esto se ve feo, mejorar otro día.
+                if ds.BodyPartExamined.upper() in ['CHEST', 'TORAX', 'BREAST'] and ds.Modality.upper() in ['CR'] and 'PA' in ds.SeriesDescription.upper():  # Esto se ve feo, mejorar otro día.
                     print('Starting processing...')
                     try:
                         status = {}
