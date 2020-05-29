@@ -3,6 +3,17 @@ import datetime, time
 import pydicom
 
 
+def check_filter(filter, ds):
+    try:
+        for tag, value in filter.items():
+            if not (ds[tag].value in value):
+                raise Exception('Tag: ' + ''.join(tag) + ' does not has a value equal to [' + ' '.join(map(str, value)) + ']')
+    except Exception as e:
+        return False, e.__str__()
+
+
+    return True, ''
+
 def create_secondary_capture(img_data, original_ds):
     filename = 'test.dcm'
     sop_instance_uid = pydicom.uid.generate_uid()
@@ -15,12 +26,12 @@ def create_secondary_capture(img_data, original_ds):
     file_meta.MediaStorageSOPInstanceUID = sop_instance_uid
     file_meta.ImplementationClassUID = '1.3.6.1.4.1.9590.100.1.0.100.4.0'
     file_meta.TransferSyntaxUID = pydicom.uid.ImplicitVRLittleEndian
-    ds = FileDataset(filename, {},file_meta = file_meta,preamble=b'\0'*128)
+    ds = FileDataset(filename, {}, file_meta=file_meta, preamble=b'\0' * 128)
     ds.Modality = 'SYN'
-    ds.ContentDate = str(datetime.date.today()).replace('-','')
+    ds.ContentDate = str(datetime.date.today()).replace('-', '')
     ds.ContentTime = str(time.time())
 
-    ds.StudyInstanceUID =  sop_study_uid
+    ds.StudyInstanceUID = sop_study_uid
     ds.SeriesInstanceUID = sop_series_uid
     ds.SOPInstanceUID = sop_instance_uid
     ds.SOPClassUID = sop_class_uid
@@ -38,7 +49,7 @@ def create_secondary_capture(img_data, original_ds):
     ds.PatientID = original_ds.PatientID
     ds.PatientBirthDate = original_ds.PatientBirthDate
     ds.PatientSex = original_ds.PatientSex
-    #ds.SpecificCharacterSet = original_ds.SpecificCharacterSet
+    # ds.SpecificCharacterSet = original_ds.SpecificCharacterSet
 
     ds.is_implicit_VR = False
     ds.save_as(filename)
