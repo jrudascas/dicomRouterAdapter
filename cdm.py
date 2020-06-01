@@ -28,7 +28,7 @@ COVID_FILTER = {
 COVID_CT_FILTER = {
     ('0x0018', '0x0015'): ['CHEST', 'TORAX', 'BREAST'],
     ('0x0008', '0x0060'): ['CT'],
-    #('0x0020', '0x0013'): [50],
+    ('0x0020', '0x0013'): [50],
     ('0x0008', '0x103E'): 'Lung 3.000'
 }
 
@@ -38,8 +38,8 @@ COVID_CT_TAGS = [
     ('Slide Number: ', ('0x0020', '0x0013')), #Instance Number
 ]
 
-MODELS_TO_SEND = [('ChestXNetv1.0', True, (1024, 1024), CHESTXNET_FILTER, None),
-                  ('COVID19v1.0', True, (1024, 1024), COVID_FILTER, None),
+MODELS_TO_SEND = [('ChestXNetv1.0', False, (1024, 1024), CHESTXNET_FILTER, None),
+                  ('COVID19v1.0', False, (1024, 1024), COVID_FILTER, None),
                   ('COVID19CTv1.0', True, (512, 512), COVID_CT_FILTER, COVID_CT_TAGS)
                   ]
 
