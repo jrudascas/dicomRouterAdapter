@@ -87,13 +87,13 @@ class AiCorePACSAdapter(TargetAdapter):
                             textsize = cv2.getTextSize(text, font, scale, thickness)[0]
                             cv2.putText(img=visual_response_image,
                                         text=text,
-                                        org=(round(original_shape[0] - textsize[0] - original_shape[0]*0.02), round(original_shape[1]*0.03 + delta)),
+                                        org=(round(original_shape[1] - textsize[0] - original_shape[1]*0.02), round(original_shape[0]*0.03 + delta)),
                                         fontFace=font,
                                         fontScale=scale,
                                         color=color_text,
                                         thickness=thickness)
 
-                            delta = delta + textsize[1] + original_shape[1]*0.01
+                            delta = delta + textsize[1] + original_shape[0]*0.01
 
                     Image.fromarray(np.uint8(visual_response_image)).convert("RGBA").show()
 
