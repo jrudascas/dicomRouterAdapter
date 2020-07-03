@@ -103,6 +103,7 @@ class AiCorePACSAdapter(TargetAdapter):
                     scu.associate(remote_address=SERVER_REMOTE_ADDRESS, remote_port=SERVER_REMOTE_PORT, remote_aet=SERVER_REMOTE_AET)
 
                     scu.send_c_store(secondary_capture_ds)
+                    scu.assoc.abort()
                     del(scu)
                 except Exception as e:
                     logger.error(e.__str__())
