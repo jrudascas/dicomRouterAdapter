@@ -26,20 +26,20 @@ COVID_FILTER = {
 }
 
 COVID_CT_FILTER = {
-    ('0x0018', '0x0015'): ['CHEST', 'TORAX', 'BREAST'],
+    ('0x0018', '0x0015'): ['CHEST', 'TORAX', 'BREAST', 'ABDOMEN'],
     ('0x0008', '0x0060'): ['CT'],
     ('0x0020', '0x0013'): [50],
-    ('0x0008', '0x103E'): 'Lung 3.000'
+    ('0x0008', '0x103E'): ['Lung 3.0', 'Lung 3.000', 'AXIAL MEDIASTINO', 'AXIAL PULMON']
 }
 
 COVID_CT_TAGS = [
-    ('', ('0x0008', '0x1030')), #Study Description
-    ('', ('0x0008', '0x103E')), #Serie Description
+    #('', ('0x0008', '0x1030')), #Study Description
+    #('', ('0x0008', '0x103E')), #Serie Description
     ('Slide Number: ', ('0x0020', '0x0013')), #Instance Number
 ]
 
-MODELS_TO_SEND = [('ChestXNetv1.0', False, (1024, 1024), CHESTXNET_FILTER, None),
-                  ('COVID19v1.0', False, (1024, 1024), COVID_FILTER, None),
+MODELS_TO_SEND = [#('ChestXNetv1.0', False, (1024, 1024), CHESTXNET_FILTER, None),
+                  #('COVID19v1.0', False, (1024, 1024), COVID_FILTER, None),
                   ('COVID19CTv1.0', True, (512, 512), COVID_CT_FILTER, COVID_CT_TAGS)
                   ]
 
@@ -55,6 +55,6 @@ SERVER_HOST_AET = 'DAEMON'
 # ---------------------------------------------------------------------------------------------------------------------
 # Si el valor que acompaña en tupla el nombre de cada modelo es igual a True, entonces la respuesta visual se retornará
 # como un Secondary Capture al PACS detallado a continuación:
-SERVER_REMOTE_ADDRESS = '198.211.117.182'
+SERVER_REMOTE_ADDRESS = '192.34.58.162'
 SERVER_REMOTE_PORT = 11112
-SERVER_REMOTE_AET = 'DCM4CHEE'
+SERVER_REMOTE_AET = 'ESSENTIALDEMO'
