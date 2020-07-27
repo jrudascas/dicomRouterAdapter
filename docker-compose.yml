@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  web:
+    image: ${IMAGE_NAME}:${TAG}
+    build: .
+    command: python scp.py
+    volumes:
+      - .:/code
+      - /tmp/:/tmp/
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}"
